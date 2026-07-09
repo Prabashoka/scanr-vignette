@@ -1,0 +1,8 @@
+# Session Information
+
+Recording session information helps make the vignette reproducible across R
+versions and operating systems.
+
+```{r}
+sessionInfo()
+```

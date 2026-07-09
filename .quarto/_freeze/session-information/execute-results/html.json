@@ -1,0 +1,15 @@
+{
+  "hash": "315c06c94081365336e697d71ed6ed44",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Session Information\n\nRecording session information helps make the vignette reproducible across R\nversions and operating systems.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsessionInfo()\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\nR version 4.6.1 (2026-06-24 ucrt)\nPlatform: x86_64-w64-mingw32/x64\nRunning under: Windows 10 x64 (build 19045)\n\nMatrix products: default\n  LAPACK version 3.12.1\n\nlocale:\n[1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   \n[3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      \n[5] LC_TIME=English_Australia.utf8    \n\ntime zone: Australia/Sydney\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n [1] htmlwidgets_1.6.4 compiler_4.6.1    fastmap_1.2.0     cli_3.6.6        \n [5] tools_4.6.1       htmltools_0.5.9   otel_0.2.0        rmarkdown_2.31   \n [9] knitr_1.51        jsonlite_2.0.0    xfun_0.59         digest_0.6.39    \n[13] rlang_1.2.0       evaluate_1.0.5   \n```\n\n\n:::\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "hash": "f0bb048c1c640bcd3ac88389c4ac4699",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Overview\n\nThe `scanr` package detects multiple change points in univariate time series\nusing window-based SCAN statistics. The method compares local windows along a\nseries, calibrates evidence for changes using resampling, and combines\ninformation across several window sizes.\n\nThis book demonstrates a typical workflow:\n\n1. simulate a univariate time series with known change points;\n2. run `scan_cpd()` with multiple window sizes;\n3. compare estimated change points with the known truth;\n4. inspect the result using diagnostic visualizations;\n5. repeat the workflow for distributional changes;\n6. use the SWAL statistic for single change-point localization.\n\n# Load the Package\n\nUsers can install the package from CRAN and load it as follows:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nif (!requireNamespace(\"Scanr\", quietly = TRUE)) {\n  install.packages(\"Scanr\")\n}\n\nlibrary(Scanr)\n```\n:::\n\n\nAlternatively, the development version of `scanr` can be installed directly\nfrom GitHub:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nif (!requireNamespace(\"devtools\", quietly = TRUE)) {\n  install.packages(\"devtools\")\n}\n\ndevtools::install_github(\"Prabashoka/scanr\")\n```\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "hash": "c43d67e873369a95ffdfbc89889f72c7",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# SWAL Statistic for Single Change-Point Detection\n\n\n\nThe SCAN procedure above combines local evidence across many windows. The\npackage also exposes lower-level localization tools for a single region that is\nbelieved to contain one change point.\n\nFor a mean change, the mean version of the SWAL statistic aligns with the CUSUM\nlocalizer. Both methods search for the split that best separates the left and\nright sides of the local region.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nset.seed(1234)\n\ntrue_single_cp <- 150\nmean_region <- c(\n  rnorm(true_single_cp, mean = 0, sd = 1),\n  rnorm(true_single_cp, mean = 2, sd = 1)\n)\n\nc(\n  truth = true_single_cp,\n  cusum = ts_cusum(mean_region),\n  swal_distribution = swal_statistic(mean_region, change_type = \"distribution\")\n)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n            truth             cusum swal_distribution \n              150               150               150 \n```\n\n\n:::\n:::\n\n\nThe distributional version is more general. It can localize changes where the\nmean is approximately unchanged but other aspects of the distribution, such as\nvariance, change sharply. In the example below, both segments have mean zero,\nbut the second segment has a much larger standard deviation.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nset.seed(1234)\n\nvar_region <- c(\n  rnorm(true_single_cp, mean = 0, sd = 0.5),\n  rnorm(true_single_cp, mean = 0, sd = 2)\n)\n\nc(\n  truth = true_single_cp,\n  cusum = ts_cusum(var_region),\n  swal_distribution = swal_statistic(var_region, change_type = \"distribution\")\n)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n            truth             cusum swal_distribution \n              150               164               152 \n```\n\n\n:::\n:::\n\n\nThe `ts_wasserstein()` function returns both the estimated split and the full\nsequence of split statistics. The plotting helper `vis_swal_curve()` displays\nthat localization curve, making it easier to inspect where the statistic is\nmaximized.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nvis_swal_curve(\n  var_region,\n  start = 1,\n  end = length(var_region),\n  x_label = \"Candidate split\",\n  y_label = \"Scaled Wasserstein statistic\",\n  title = \"\"\n)\n```\n\n::: {.cell-output-display}\n![](swal-statistic_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n",
+    "supporting": [
+      "swal-statistic_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

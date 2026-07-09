@@ -1,0 +1,27 @@
+project:
+  type: book
+
+book:
+  title: "Getting Started with Scanr"
+  sidebar:
+    collapse-level: 2
+  chapters:
+    - index.qmd
+    - installation.qmd
+    - change-in-mean.qmd
+    - change-in-distribution.qmd
+    - swal-statistic.qmd
+    - session-information.qmd
+
+format:
+  html:
+    toc: false
+    toc-depth: 4
+    number-sections: true
+
+execute:
+  warning: false
+  message: false
+  fig-width: 7
+  fig-height: 4
+  fig-align: center

@@ -1,0 +1,23 @@
+{
+  "index.qmd": {
+    "index.html": "38e0745e"
+  },
+  "change-point-detection.qmd": {
+    "change-point-detection.html": "62816d8e"
+  },
+  "swal-statistic.qmd": {
+    "swal-statistic.html": "b0637cd4"
+  },
+  "session-information.qmd": {
+    "session-information.html": "41c422df"
+  },
+  "installation.qmd": {
+    "installation.html": "d23208f6"
+  },
+  "change-in-mean.qmd": {
+    "change-in-mean.html": "4dc9a5a6"
+  },
+  "change-in-distribution.qmd": {
+    "change-in-distribution.html": "7001d902"
+  }
+}

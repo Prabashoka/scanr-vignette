@@ -1,0 +1,15 @@
+{
+  "hash": "555c4000c992cabbc0544d8bbee9fe2c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Installation\n\nUsers can install the package from CRAN and load it as follows:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nif (!requireNamespace(\"Scanr\", quietly = TRUE)) {\n  install.packages(\"Scanr\")\n}\n\nlibrary(Scanr)\n```\n:::\n\n\nAlternatively, the development version of `Scanr` can be installed directly\nfrom GitHub:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nif (!requireNamespace(\"devtools\", quietly = TRUE)) {\n  install.packages(\"devtools\")\n}\n\ndevtools::install_github(\"Prabashoka/scanr\")\n```\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

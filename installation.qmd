@@ -1,0 +1,23 @@
+# Installation
+
+Users can install the package from CRAN and load it as follows:
+
+```{r}
+if (!requireNamespace("Scanr", quietly = TRUE)) {
+  install.packages("Scanr")
+}
+
+library(Scanr)
+```
+
+Alternatively, the development version of `Scanr` can be installed directly
+from GitHub:
+
+```{r}
+#| eval: false
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+
+devtools::install_github("Prabashoka/scanr")
+```
