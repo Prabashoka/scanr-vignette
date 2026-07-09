@@ -4,7 +4,7 @@
 #| label: setup-swal
 #| include: false
 
-library(Scanr)
+library(scanr)
 ```
 
 The SCAN procedure above combines local evidence across many windows. The

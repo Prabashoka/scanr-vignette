@@ -3,14 +3,15 @@
 Users can install the package from CRAN and load it as follows:
 
 ```{r}
-if (!requireNamespace("Scanr", quietly = TRUE)) {
-  install.packages("Scanr")
+#| eval: false
+if (!requireNamespace("scanr", quietly = TRUE)) {
+  install.packages("scanr")
 }
 
-library(Scanr)
+library(scanr)
 ```
 
-Alternatively, the development version of `Scanr` can be installed directly
+Alternatively, the development version of `scanr` can be installed directly
 from GitHub:
 
 ```{r}

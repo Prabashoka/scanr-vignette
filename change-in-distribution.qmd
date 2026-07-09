@@ -4,7 +4,7 @@
 #| label: setup-distribution
 #| include: false
 
-library(Scanr)
+library(scanr)
 ```
 
 This example uses segments from different distribution families, including

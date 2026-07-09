@@ -1,6 +1,6 @@
 # Overview
 
-The `Scanr` package detects multiple change points in univariate time series
+The `scanr` package detects multiple change points in univariate time series
 using window-based SCAN statistics. The method compares local windows along a
 series, calibrates evidence for changes using resampling, and combines
 information across several window sizes.

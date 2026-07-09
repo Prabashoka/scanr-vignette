@@ -3,7 +3,7 @@ project:
   output-dir: books
 
 book:
-  title: "Getting Started with Scanr"
+  title: "Getting Started with scanr"
   sidebar:
     collapse-level: 2
   chapters:

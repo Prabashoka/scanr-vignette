@@ -4,7 +4,7 @@
 #| label: setup-mean
 #| include: false
 
-library(Scanr)
+library(scanr)
 ```
 
 We first simulate a white-noise time series of length 20,000 with 20 change
