@@ -1,1 +1,1 @@
-{"entries":[],"headings":["download-the-data","read-and-clean-the-minute-data","aggregate-to-hourly-prices","choose-window-sizes","detect-changes-in-mean"],"options":{"chapters":true}}
+{"entries":[],"headings":["load-the-data","choose-window-sizes","detect-changes-in-mean","visualize-the-result","inspect-the-vote-scree"],"options":{"chapters":true}}

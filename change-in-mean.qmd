@@ -63,9 +63,16 @@ while still being large enough to estimate the local distributions on each side
 of a candidate split.
 
 ```{r}
+window_sizes <- default_window_sizes(
+  length(x_mean),
+  min_window = 100L,
+  max_window = floor(length(x_mean)^(2 / 3)),
+  n_windows = 11L
+)
+
 fit_mean <- scan_cpd(
   x_mean,
-  window_sizes = c(100, 164, 227, 291, 355, 418, 482, 546, 609, 673, 737),
+  window_sizes = window_sizes,
   n_boot = 400,
   random_state = 1234,
   change_type = "mean",

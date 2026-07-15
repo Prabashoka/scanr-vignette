@@ -87,9 +87,16 @@ For distributional changes, set `change_type = "distribution"`. This uses the
 distribution-sensitive local statistic rather than a mean-only statistic.
 
 ```{r}
+window_sizes <- default_window_sizes(
+  length(x_dist),
+  min_window = 100L,
+  max_window = floor(length(x_dist)^(2 / 3)),
+  n_windows = 15L
+)
+
 fit_dist <- scan_cpd(
   x_dist,
-  window_sizes = c(100, 145, 191, 236, 282, 327, 373, 418, 464, 509, 555, 600, 646, 691, 737),
+  window_sizes = window_sizes,
   n_boot = 1000,
   random_state = 1234,
   change_type = "distribution",

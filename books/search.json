@@ -24,7 +24,7 @@
     "href": "change-in-mean.html",
     "title": "3  Change in Mean (Example 1)",
     "section": "",
-    "text": "3.1 Run SCAN Change-Point Detection\nWe first simulate a white-noise time series of length 20,000 with 20 change points and 21 piecewise-constant mean regimes. The noise variance is fixed, so this example focuses on changes in the mean.\nThe plot below shows the simulated series.\nThe window_sizes argument controls the local scales used by the scan. The window sizes should be smaller than the spacing between nearby change points, while still being large enough to estimate the local distributions on each side of a candidate split.\nfit_mean &lt;- scan_cpd(\n  x_mean,\n  window_sizes = c(100, 164, 227, 291, 355, 418, 482, 546, 609, 673, 737),\n  n_boot = 400,\n  random_state = 1234,\n  change_type = \"mean\",\n  n_jobs = 1\n)\n\nfit_mean\n\nscanr change-point result\nobservations: 20000 \nchange points: 952, 1905, 2858, 3809, 4760, 5715, 6668, 7620, 8573, 9525, 10478, 11410, 12380, 13338, 14288, 15230, 16177, 17145, 18098, 19050\nThe estimated change points can be extracted directly from the fitted object.\nfit_mean$change_points\n\n [1]   952  1905  2858  3809  4760  5715  6668  7620  8573  9525 10478 11410\n[13] 12380 13338 14288 15230 16177 17145 18098 19050",
+    "text": "3.1 Run SCAN Change-Point Detection\nWe first simulate a white-noise time series of length 20,000 with 20 change points and 21 piecewise-constant mean regimes. The noise variance is fixed, so this example focuses on changes in the mean.\nThe plot below shows the simulated series.\nThe window_sizes argument controls the local scales used by the scan. The window sizes should be smaller than the spacing between nearby change points, while still being large enough to estimate the local distributions on each side of a candidate split.\nwindow_sizes &lt;- default_window_sizes(\n  length(x_mean),\n  min_window = 100L,\n  max_window = floor(length(x_mean)^(2 / 3)),\n  n_windows = 11L\n)\n\nfit_mean &lt;- scan_cpd(\n  x_mean,\n  window_sizes = window_sizes,\n  n_boot = 400,\n  random_state = 1234,\n  change_type = \"mean\",\n  n_jobs = 1\n)\n\nfit_mean\n\nscanr change-point result\nobservations: 20000 \nchange points: 952, 1905, 2858, 3809, 4760, 5715, 6668, 7620, 8573, 9525, 10478, 11410, 12383, 13336, 14288, 15230, 16177, 17145, 18098, 19050\nThe estimated change points can be extracted directly from the fitted object.\nfit_mean$change_points\n\n [1]   952  1905  2858  3809  4760  5715  6668  7620  8573  9525 10478 11410\n[13] 12383 13336 14288 15230 16177 17145 18098 19050",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Change in Mean (Example 1)</span>"
     ]
@@ -44,7 +44,7 @@
     "href": "change-in-mean.html#evaluate-detection-accuracy",
     "title": "3  Change in Mean (Example 1)",
     "section": "3.2 Evaluate Detection Accuracy",
-    "text": "3.2 Evaluate Detection Accuracy\nFor simulated data, estimated change points can be compared with the known truth. The tolerance argument controls how close an estimated change point must be to a true change point to count as a match.\n\ncpd_metrics(\n  true_cps = change_points,\n  estimated_cps = fit_mean$change_points,\n  n = length(x_mean),\n  tolerance = 20\n)\n\n$matches\n    true estimated distance\n1    952       952        0\n2   1905      1905        0\n3   2858      2858        0\n4   5715      5715        0\n5   6668      6668        0\n6   7620      7620        0\n7   8573      8573        0\n8   9525      9525        0\n9  10478     10478        0\n10 14288     14288        0\n11 17145     17145        0\n12 18098     18098        0\n13 19050     19050        0\n14  3810      3809        1\n15  4763      4760        3\n16 12383     12380        3\n17 13335     13338        3\n18 15240     15230       10\n19 16193     16177       16\n20 11430     11410       20\n\n$precision\n[1] 1\n\n$recall\n[1] 1\n\n$f1\n[1] 1\n\n$covering\n[1] 0.9944529",
+    "text": "3.2 Evaluate Detection Accuracy\nFor simulated data, estimated change points can be compared with the known truth. The tolerance argument controls how close an estimated change point must be to a true change point to count as a match.\n\ncpd_metrics(\n  true_cps = change_points,\n  estimated_cps = fit_mean$change_points,\n  n = length(x_mean),\n  tolerance = 20\n)\n\n$matches\n    true estimated distance\n1    952       952        0\n2   1905      1905        0\n3   2858      2858        0\n4   5715      5715        0\n5   6668      6668        0\n6   7620      7620        0\n7   8573      8573        0\n8   9525      9525        0\n9  10478     10478        0\n10 12383     12383        0\n11 14288     14288        0\n12 17145     17145        0\n13 18098     18098        0\n14 19050     19050        0\n15  3810      3809        1\n16 13335     13336        1\n17  4763      4760        3\n18 15240     15230       10\n19 16193     16177       16\n20 11430     11410       20\n\n$precision\n[1] 1\n\n$recall\n[1] 1\n\n$f1\n[1] 1\n\n$covering\n[1] 0.994948",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Change in Mean (Example 1)</span>"
     ]
@@ -74,7 +74,7 @@
     "href": "change-in-distribution.html",
     "title": "4  Change in Distribution (Example 2)",
     "section": "",
-    "text": "4.1 Run SCAN Change-Point Detection\nThis example uses segments from different distribution families, including normal, exponential, Poisson, gamma, uniform, Student’s t, lognormal, beta, Weibull, and chi-square distributions. Each segment is standardized before being rescaled, so the signal is not only a simple shift in the mean. This creates a more challenging distributional change-point problem.\nThe simulated series contains changes in distributional shape and scale.\nFor distributional changes, set change_type = \"distribution\". This uses the distribution-sensitive local statistic rather than a mean-only statistic.\nfit_dist &lt;- scan_cpd(\n  x_dist,\n  window_sizes = c(100, 145, 191, 236, 282, 327, 373, 418, 464, 509, 555, 600, 646, 691, 737),\n  n_boot = 1000,\n  random_state = 1234,\n  change_type = \"distribution\",\n  vote_threshold = 0.5,\n  n_jobs = 1\n)\nThe set of estimated change points is:\nfit_dist$change_points\n\n [1]   954  1902  2860  3809  4764  5709  6669  7611  8573  9522 10478 11430\n[13] 12383 13335 14289 15240 16195 17145 18100 19048",
+    "text": "4.1 Run SCAN Change-Point Detection\nThis example uses segments from different distribution families, including normal, exponential, Poisson, gamma, uniform, Student’s t, lognormal, beta, Weibull, and chi-square distributions. Each segment is standardized before being rescaled, so the signal is not only a simple shift in the mean. This creates a more challenging distributional change-point problem.\nThe simulated series contains changes in distributional shape and scale.\nFor distributional changes, set change_type = \"distribution\". This uses the distribution-sensitive local statistic rather than a mean-only statistic.\nwindow_sizes &lt;- default_window_sizes(\n  length(x_dist),\n  min_window = 100L,\n  max_window = floor(length(x_dist)^(2 / 3)),\n  n_windows = 15L\n)\n\nfit_dist &lt;- scan_cpd(\n  x_dist,\n  window_sizes = window_sizes,\n  n_boot = 1000,\n  random_state = 1234,\n  change_type = \"distribution\",\n  vote_threshold = 0.5,\n  n_jobs = 1\n)\nThe set of estimated change points is:\nfit_dist$change_points\n\n [1]   954  1902  2860  3809  4764  5709  6669  7611  8573  9522 10478 11430\n[13] 12383 13335 14289 15240 16195 17145 18100 19048",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Change in Distribution (Example 2)</span>"
     ]
@@ -110,13 +110,63 @@
     ]
   },
   {
+    "objectID": "bitcoin-example.html",
+    "href": "bitcoin-example.html",
+    "title": "6  Bitcoin Prices: A Real-World Example",
+    "section": "",
+    "text": "6.1 Load the Data\nThis example applies change-point detection to hourly Bitcoin closing prices. The data are derived from the Bitcoin Historical Data dataset on Kaggle, which contains minute-level OHLC prices and trading volume.\nbtc_hourly &lt;- read.csv(\n  \"https://raw.githubusercontent.com/Prabashoka/scanr-vignette/refs/heads/main/Data/BTC-hourly-data-closing-price.csv\"\n)\n\nbtc_hourly$Datetime &lt;- as.POSIXct(\n  btc_hourly$Datetime,\n  tz = \"UTC\"\n)\n\nhead(btc_hourly)\n\n             Datetime   Open   High    Low  Close    Volume\n1 2017-01-01 00:00:00 966.30 966.99 964.60 966.60 102.48481\n2 2017-01-01 01:00:00 966.60 966.60 962.54 963.87 149.02555\n3 2017-01-01 02:00:00 964.35 965.75 961.99 963.97  94.26740\n4 2017-01-01 03:00:00 963.97 964.71 960.53 962.83  77.61967\n5 2017-01-01 04:00:00 960.61 963.64 960.60 963.46  46.81022\n6 2017-01-01 05:00:00 963.46 964.00 962.80 964.00  53.52626\nLoad the installed scanr package.\nlibrary(scanr)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Bitcoin Prices: A Real-World Example</span>"
+    ]
+  },
+  {
+    "objectID": "bitcoin-example.html#choose-window-sizes",
+    "href": "bitcoin-example.html#choose-window-sizes",
+    "title": "6  Bitcoin Prices: A Real-World Example",
+    "section": "6.2 Choose Window Sizes",
+    "text": "6.2 Choose Window Sizes\nFollowing the Python analysis, the largest candidate window is \\(\\lfloor n^{2/3}\\rfloor\\). The package helper selects 15 default window sizes between 100 hours and that upper bound.\n\nn &lt;- nrow(btc_hourly)\nwindow_sizes &lt;- default_window_sizes(\n  n,\n  min_window = 100,\n  max_window = floor(n^(2 / 3)),\n  n_windows = 15,\n  seed = 1000\n)\nwindow_sizes\n\n [1]  313  400  443  457  501  505  679  780 1028 1107 1174 1408 1422 1478 1545\n\n\nThe closing prices are standardized before detection. Standardization changes their units but preserves the locations of mean shifts.\n\nx &lt;- as.numeric(scale(btc_hourly$Close))",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Bitcoin Prices: A Real-World Example</span>"
+    ]
+  },
+  {
+    "objectID": "bitcoin-example.html#detect-changes-in-mean",
+    "href": "bitcoin-example.html#detect-changes-in-mean",
+    "title": "6  Bitcoin Prices: A Real-World Example",
+    "section": "6.3 Detect Changes in Mean",
+    "text": "6.3 Detect Changes in Mean\nThe Python voting threshold of 0.625 corresponds to vote_threshold = 0.625 in scan_cpd(). The R interface uses n_boot and random_state for bootstrap calibration and reproducibility.\n\nfit_btc &lt;- scan_cpd(\n  x,\n  window_sizes = window_sizes,\n  n_boot = 1000,\n  vote_threshold = 0.5,\n  random_state = 100,\n  change_type = \"mean\",\n  n_jobs = 1\n)\n\nfit_btc\n\nscanr change-point result\nobservations: 81744 \nchange points: 1223, 3301, 4812, 6474, 7651, 9473, 10504, 12617, 16384, 18688, 20546, 21477, 23922, 25242, 26592, 27994, 29152, 31275, 33038, 35988, 38377, 40265, 41354, 43157, 46173, 47714, 49350, 51306, 52865, 54049, 56681, 58071, 59686, 60544, 62409, 63835, 66050, 66501, 67630, 68965, 71446, 73191, 74704, 77511, 79350 \n\n\nThe fitted object stores change points as positions in the hourly series. We can map those positions back to UTC dates and observed prices.\n\ndetected_changes &lt;- btc_hourly[\n  fit_btc$change_points,\n  c(\"Datetime\", \"Close\"),\n  drop = FALSE\n]\n\ncat(\"Number of change-points:\", nrow(detected_changes), \"\\n\")\n\nNumber of change-points: 45 \n\ndetected_changes\n\n                 Datetime     Close\n1223  2017-02-20 22:00:00   1061.95\n3301  2017-05-18 12:00:00   1797.71\n4812  2017-07-20 11:00:00   2463.98\n6474  2017-09-27 17:00:00   4090.00\n7651  2017-11-15 18:00:00   7142.50\n9473  2018-01-30 16:00:00  10340.29\n10504 2018-03-14 15:00:00   8742.72\n12617 2018-06-10 16:00:00   7211.45\n16384 2018-11-14 15:00:00   6057.97\n18688 2019-02-18 15:00:00   3803.58\n20546 2019-05-07 01:00:00   5749.27\n21477 2019-06-14 20:00:00   8452.00\n23922 2019-09-24 17:00:00   9458.29\n25242 2019-11-18 17:00:00   8327.22\n26592 2020-01-13 23:00:00   8105.01\n27994 2020-03-12 09:00:00   7342.49\n29152 2020-04-29 15:00:00   8372.73\n31275 2020-07-27 02:00:00  10064.65\n33038 2020-10-08 13:00:00  10734.77\n35988 2021-02-08 11:00:00  39473.03\n38377 2021-05-19 00:00:00  42634.99\n40265 2021-08-05 16:00:00  39806.83\n41354 2021-09-20 01:00:00  47254.58\n43157 2021-12-04 04:00:00  50344.32\n46173 2022-04-08 20:00:00  42814.11\n47714 2022-06-12 01:00:00  28218.75\n49350 2022-08-19 05:00:00  22820.00\n51306 2022-11-08 17:00:00  19340.00\n52865 2023-01-12 16:00:00  18135.00\n54049 2023-03-03 00:00:00  23421.00\n56681 2023-06-20 16:00:00  27378.00\n58071 2023-08-17 14:00:00  28349.00\n59686 2023-10-23 21:00:00  31631.00\n60544 2023-11-28 15:00:00  37527.00\n62409 2024-02-14 08:00:00  50803.00\n63835 2024-04-13 18:00:00  67192.00\n66050 2024-07-15 01:00:00  61392.00\n66501 2024-08-02 20:00:00  62534.00\n67630 2024-09-18 21:00:00  60213.00\n68965 2024-11-13 12:00:00  87802.00\n71446 2025-02-24 21:00:00  93953.00\n73191 2025-05-08 14:00:00  99419.00\n74704 2025-07-10 15:00:00 111472.00\n77511 2025-11-04 14:00:00 104463.00\n79350 2026-01-20 05:00:00  91549.00",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Bitcoin Prices: A Real-World Example</span>"
+    ]
+  },
+  {
+    "objectID": "bitcoin-example.html#visualize-the-result",
+    "href": "bitcoin-example.html#visualize-the-result",
+    "title": "6  Bitcoin Prices: A Real-World Example",
+    "section": "6.4 Visualize the Result",
+    "text": "6.4 Visualize the Result\n\nvis_change_points(\n  x,\n  fit_btc,\n  index = btc_hourly$Datetime,\n  x_label = \"Date (UTC)\",\n  y_label = \"Standardized hourly closing price\",\n  title = \"Mean changes in hourly Bitcoin closing prices\"\n)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Bitcoin Prices: A Real-World Example</span>"
+    ]
+  },
+  {
+    "objectID": "bitcoin-example.html#inspect-the-vote-scree",
+    "href": "bitcoin-example.html#inspect-the-vote-scree",
+    "title": "6  Bitcoin Prices: A Real-World Example",
+    "section": "6.5 Inspect the Vote Scree",
+    "text": "6.5 Inspect the Vote Scree\nThe vote scree shows how much support each candidate location receives across the selected window sizes. The horizontal threshold corresponds to the vote_threshold = 0.5 used above.\n\nvis_vote_scree(fit_btc)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCaution\n\n\n\nBitcoin prices are strongly trending and serially dependent. Detected changes identify shifts in the mean price level; they should not be interpreted as causal market events.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Bitcoin Prices: A Real-World Example</span>"
+    ]
+  },
+  {
     "objectID": "session-information.html",
     "href": "session-information.html",
-    "title": "6  Session Information",
+    "title": "7  Session Information",
     "section": "",
     "text": "Recording session information helps make the vignette reproducible across R versions and operating systems.\n\nsessionInfo()\n\nR version 4.6.1 (2026-06-24 ucrt)\nPlatform: x86_64-w64-mingw32/x64\nRunning under: Windows 10 x64 (build 19045)\n\nMatrix products: default\n  LAPACK version 3.12.1\n\nlocale:\n[1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8   \n[3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C                      \n[5] LC_TIME=English_Australia.utf8    \n\ntime zone: Australia/Sydney\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n [1] htmlwidgets_1.6.4 compiler_4.6.1    fastmap_1.2.0     cli_3.6.6        \n [5] tools_4.6.1       htmltools_0.5.9   otel_0.2.0        rmarkdown_2.31   \n [9] knitr_1.51        jsonlite_2.0.0    xfun_0.59         digest_0.6.39    \n[13] rlang_1.2.0       evaluate_1.0.5",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Session Information</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session Information</span>"
     ]
   }
 ]

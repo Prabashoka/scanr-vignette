@@ -177,8 +177,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./bitcoin-example.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bitcoin Prices: A Real-World Example</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./session-information.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Session Information</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session Information</span></span></a>
   </div>
 </li>
     </ul>
@@ -255,20 +261,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="3.1" class="anchored" data-anchor-id="run-scan-change-point-detection"><span class="header-section-number">3.1</span> Run SCAN Change-Point Detection</h2>
 <p>The <code>window_sizes</code> argument controls the local scales used by the scan. The window sizes should be smaller than the spacing between nearby change points, while still being large enough to estimate the local distributions on each side of a candidate split.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit_mean <span class="ot">&lt;-</span> <span class="fu">scan_cpd</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  x_mean,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">window_sizes =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">164</span>, <span class="dv">227</span>, <span class="dv">291</span>, <span class="dv">355</span>, <span class="dv">418</span>, <span class="dv">482</span>, <span class="dv">546</span>, <span class="dv">609</span>, <span class="dv">673</span>, <span class="dv">737</span>),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_boot =</span> <span class="dv">400</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">random_state =</span> <span class="dv">1234</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">change_type =</span> <span class="st">"mean"</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_jobs =</span> <span class="dv">1</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>fit_mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>window_sizes <span class="ot">&lt;-</span> <span class="fu">default_window_sizes</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(x_mean),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_window =</span> <span class="dv">100</span>L,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_window =</span> <span class="fu">floor</span>(<span class="fu">length</span>(x_mean)<span class="sc">^</span>(<span class="dv">2</span> <span class="sc">/</span> <span class="dv">3</span>)),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_windows =</span> <span class="dv">11</span>L</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>fit_mean <span class="ot">&lt;-</span> <span class="fu">scan_cpd</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  x_mean,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">window_sizes =</span> window_sizes,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_boot =</span> <span class="dv">400</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random_state =</span> <span class="dv">1234</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">change_type =</span> <span class="st">"mean"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_jobs =</span> <span class="dv">1</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>fit_mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>scanr change-point result
 observations: 20000 
-change points: 952, 1905, 2858, 3809, 4760, 5715, 6668, 7620, 8573, 9525, 10478, 11410, 12380, 13338, 14288, 15230, 16177, 17145, 18098, 19050 </code></pre>
+change points: 952, 1905, 2858, 3809, 4760, 5715, 6668, 7620, 8573, 9525, 10478, 11410, 12383, 13336, 14288, 15230, 16177, 17145, 18098, 19050 </code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -289,7 +302,7 @@ change points: 952, 1905, 2858, 3809, 4760, 5715, 6668, 7620, 8573, 9525, 10478,
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fit_mean<span class="sc">$</span>change_points</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]   952  1905  2858  3809  4760  5715  6668  7620  8573  9525 10478 11410
-[13] 12380 13338 14288 15230 16177 17145 18098 19050</code></pre>
+[13] 12383 13336 14288 15230 16177 17145 18098 19050</code></pre>
 </div>
 </div>
 </section>
@@ -315,14 +328,14 @@ change points: 952, 1905, 2858, 3809, 4760, 5715, 6668, 7620, 8573, 9525, 10478,
 7   8573      8573        0
 8   9525      9525        0
 9  10478     10478        0
-10 14288     14288        0
-11 17145     17145        0
-12 18098     18098        0
-13 19050     19050        0
-14  3810      3809        1
-15  4763      4760        3
-16 12383     12380        3
-17 13335     13338        3
+10 12383     12383        0
+11 14288     14288        0
+12 17145     17145        0
+13 18098     18098        0
+14 19050     19050        0
+15  3810      3809        1
+16 13335     13336        1
+17  4763      4760        3
 18 15240     15230       10
 19 16193     16177       16
 20 11430     11410       20
@@ -337,7 +350,7 @@ $f1
 [1] 1
 
 $covering
-[1] 0.9944529</code></pre>
+[1] 0.994948</code></pre>
 </div>
 </div>
 </section>

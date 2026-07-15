@@ -12,6 +12,7 @@ book:
     - change-in-mean.qmd
     - change-in-distribution.qmd
     - swal-statistic.qmd
+    - bitcoin-example.qmd
     - session-information.qmd
 
 format:

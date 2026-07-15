@@ -1,0 +1,121 @@
+---
+title: "Bitcoin Prices: A Real-World Example"
+---
+
+This example applies change-point detection to hourly Bitcoin closing prices.
+The data are derived from the
+[Bitcoin Historical Data](https://www.kaggle.com/datasets/mczielinski/bitcoin-historical-data)
+dataset on Kaggle, which contains minute-level OHLC prices and trading volume.
+
+## Load the Data
+
+```{r}
+btc_hourly <- read.csv(
+  "https://raw.githubusercontent.com/Prabashoka/scanr-vignette/refs/heads/main/Data/BTC-hourly-data-closing-price.csv"
+)
+
+btc_hourly$Datetime <- as.POSIXct(
+  btc_hourly$Datetime,
+  tz = "UTC"
+)
+
+head(btc_hourly)
+```
+Load the installed `scanr` package.
+```{r}
+library(scanr)
+```
+
+## Choose Window Sizes
+
+Following the Python analysis, the largest candidate window is
+$\lfloor n^{2/3}\rfloor$. The package helper selects 15 default window sizes
+between 100 hours and that upper bound.
+
+```{r}
+n <- nrow(btc_hourly)
+window_sizes <- default_window_sizes(
+  n,
+  min_window = 100,
+  max_window = floor(n^(2 / 3)),
+  n_windows = 15,
+  seed = 1000
+)
+window_sizes
+```
+
+The closing prices are standardized before detection. Standardization changes
+their units but preserves the locations of mean shifts.
+
+```{r}
+x <- as.numeric(scale(btc_hourly$Close))
+```
+
+## Detect Changes in Mean
+
+The Python voting threshold of 0.625 corresponds to
+`vote_threshold = 0.625` in `scan_cpd()`. The R interface uses `n_boot` and
+`random_state` for bootstrap calibration and reproducibility.
+
+```{r}
+fit_btc <- scan_cpd(
+  x,
+  window_sizes = window_sizes,
+  n_boot = 1000,
+  vote_threshold = 0.5,
+  random_state = 100,
+  change_type = "mean",
+  n_jobs = 1
+)
+
+fit_btc
+```
+
+The fitted object stores change points as positions in the hourly series. We
+can map those positions back to UTC dates and observed prices.
+
+```{r}
+detected_changes <- btc_hourly[
+  fit_btc$change_points,
+  c("Datetime", "Close"),
+  drop = FALSE
+]
+
+cat("Number of change-points:", nrow(detected_changes), "\n")
+detected_changes
+```
+
+## Visualize the Result
+
+```{r}
+#| fig-width: 11
+#| fig-height: 5
+
+vis_change_points(
+  x,
+  fit_btc,
+  index = btc_hourly$Datetime,
+  x_label = "Date (UTC)",
+  y_label = "Standardized hourly closing price",
+  title = "Mean changes in hourly Bitcoin closing prices"
+)
+```
+
+## Inspect the Vote Scree
+
+The vote scree shows how much support each candidate location receives across
+the selected window sizes. The horizontal threshold corresponds to the
+`vote_threshold = 0.5` used above.
+
+```{r}
+#| fig-width: 11
+#| fig-height: 5
+
+vis_vote_scree(fit_btc)
+```
+
+::: {.callout-caution}
+Bitcoin prices are strongly trending and serially dependent. Detected changes
+identify shifts in the mean price level; they should not be interpreted as
+causal market events.
+:::
